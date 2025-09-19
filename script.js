@@ -82,16 +82,18 @@ function loadUsers() {
             status += user.device_id ? ' 📱 Использован' : ' ⚠️ В процессе';
         }
         
-        userElement.innerHTML = `
-            <div class="user-info">
-                <strong>${login}</strong> - ${user.key}
-                <br><small>${status} | Создан: ${user.created}</small>
-                ${user.device_id ? `<div class="device-id">Device ID: ${user.device_id}</div>` : ''}
-            </div>
-            <div class="user-actions">
-                <button class="delete-btn" onclick="deleteUser('${login}')">Удалить</button>
-            </div>
-        `;
+        // В функции loadUsers() измени вывод:
+userElement.innerHTML = `
+    <div class="user-info">
+        <strong>${login}</strong> - ${user.key}
+        <br><small>${status} | Создан: ${user.created}</small>
+        ${user.device_id ? `<div class="device-id">Device ID: ${user.device_id}</div>` : ''}
+        ${user.last_used ? `<div class="device-id">Последнее использование: ${user.last_used}</div>` : ''}
+    </div>
+    <div class="user-actions">
+        <button class="delete-btn" onclick="deleteUser('${login}')">Удалить</button>
+    </div>
+`;
         container.appendChild(userElement);
     }
 }
