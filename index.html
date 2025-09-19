@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth System</title>
+    <title>Auth System - 1 Key 1 Device</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>🔐 Система авторизации</h1>
+        <h1>🔐 1 Key - 1 Device</h1>
         
         <div class="section">
             <h2>Добавить пользователя</h2>
             <div class="form-group">
-                <input type="text" id="newLogin" placeholder="Логин">
+                <input type="text" id="newLogin" placeholder="Логин пользователя">
                 <button onclick="generateKey()">Сгенерировать ключ</button>
             </div>
             <div class="form-group">
@@ -23,18 +23,18 @@
         </div>
 
         <div class="section">
-            <h2>Текущие пользователи</h2>
+            <h2>Активные пользователи</h2>
             <div id="usersList">
                 <p>Загрузка...</p>
             </div>
         </div>
 
         <div class="section">
-            <h2>API для скрипта</h2>
+            <h2>Статус системы</h2>
             <div class="info-box">
-                <p><strong>API Endpoint:</strong> <code id="apiUrl">/api/check</code></p>
-                <p><strong>Метод:</strong> POST</p>
-                <p><strong>Формат:</strong> JSON</p>
+                <p><strong>GitHub RAW:</strong> <code id="rawUrl">https://raw.githubusercontent.com/.../keys.json</code></p>
+                <p><strong>Устройств онлайн:</strong> <span id="onlineCount">0</span></p>
+                <button onclick="updateKeysFile()">🔄 Обновить keys.json</button>
             </div>
         </div>
     </div>
