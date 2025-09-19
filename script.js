@@ -1,7 +1,5 @@
-// База данных в LocalStorage
 const DB_KEY = 'auth_system_users';
 
-// Функции для работы с базой данных
 function getDatabase() {
     const data = localStorage.getItem(DB_KEY);
     return data ? JSON.parse(data) : {};
@@ -87,57 +85,66 @@ function loadUsers() {
     }
 }
 
-function exportDatabase() {
+function updateLuaScript() {
     const db = getDatabase();
-    const dataStr = JSON.stringify(db, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    let luaCode = `local gg = gg\n\n`;
+    luaCode += `local GITHUB_URL = "https://bmr25854-cmd.github.io/mimicry-rep-name-github.io/"\n\n`;
+    luaCode += `local VALID_USERS = {\n`;
     
-    const exportFileDefaultName = 'users_database.json';
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-}
-
-function importDatabase(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const data = JSON.parse(e.target.result);
-            saveDatabase(data);
-            loadUsers();
-            alert('База данных импортирована!');
-        } catch (error) {
-            alert('Ошибка при импорте файла!');
+    for (const [login, user] of Object.entries(db)) {
+        if (user.active) {
+            luaCode += `    ["${login}"] = "${user.key}",\n`;
         }
-    };
-    reader.readAsText(file);
+    }
+    
+    luaCode += `}\n\n`;
+    luaCode += `function checkLicense()\n`;
+    luaCode += `    gg.toast("🔐 Проверка лицензии...")\n`;
+    luaCode += `    \n`;
+    luaCode += `    local login_data = gg.prompt({\n`;
+    luaCode += `        "Введите ваш логин:",\n`;
+    luaCode += `        "Введите ваш ключ:"\n`;
+    luaCode += `    }, {"", ""}, {"text", "text"})\n`;
+    luaCode += `    \n`;
+    luaCode += `    if not login_data or login_data[1] == "" or login_data[2] == "" then\n`;
+    luaCode += `        gg.alert("❌ Логин или ключ не введены!")\n`;
+    luaCode += `        return false\n`;
+    luaCode += `    end\n`;
+    luaCode += `    \n`;
+    luaCode += `    local login = login_data[1]\n`;
+    luaCode += `    local key = login_data[2]\n\n`;
+    luaCode += `    if VALID_USERS[login] and VALID_USERS[login] == key then\n`;
+    luaCode += `        gg.toast("✅ Доступ разрешен! Привет, " .. login)\n`;
+    luaCode += `        return true\n`;
+    luaCode += `    else\n`;
+    luaCode += `        local message = "❌ Неверный логин или ключ!\\\\n\\\\n📋 Актуальные логины:\\\\n"\n`;
+    luaCode += `        for user_login, user_key in pairs(VALID_USERS) do\n`;
+    luaCode += `            message = message .. "👤 " .. user_login .. " : " .. user_key .. "\\\\n"\n`;
+    luaCode += `        end\n`;
+    luaCode += `        message = message .. "\\\\n🌐 Для получения доступа:\\\\n" .. GITHUB_URL\n`;
+    luaCode += `        gg.alert(message)\n`;
+    luaCode += `        return false\n`;
+    luaCode += `    end\n`;
+    luaCode += `end\n\n`;
+    luaCode += `if checkLicense() then\n`;
+    luaCode += `    gg.toast('✅ Скрипт запущен!')\n`;
+    luaCode += `    -- ТВОЙ ОСНОВНОЙ КОД ЗДЕСЬ --\n`;
+    luaCode += `else\n`;
+    luaCode += `    os.exit()\n`;
+    luaCode += `end`;
+
+    const blob = new Blob([luaCode], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'auth_script.lua';
+    a.click();
+    
+    URL.revokeObjectURL(url);
 }
 
-// Инициализация
 document.addEventListener('DOMContentLoaded', function() {
     loadUsers();
-    
-    // Показываем URL API
     document.getElementById('apiUrl').textContent = window.location.href;
-    document.getElementById('status').textContent = 'GitHub Pages активен';
-    document.getElementById('status').className = 'status-online';
-    
-    // Добавляем кнопки экспорта/импорта
-    const userSection = document.querySelector('.section:nth-child(2)');
-    const importExportHTML = `
-        <div style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
-            <button onclick="exportDatabase()">📤 Экспорт базы</button>
-            <label style="display:inline-block; margin-left:10px;">
-                📥 Импорт базы
-                <input type="file" accept=".json" onchange="importDatabase(event)" 
-                       style="display:none;" id="importInput">
-            </label>
-        </div>
-    `;
-    userSection.insertAdjacentHTML('beforeend', importExportHTML);
 });
