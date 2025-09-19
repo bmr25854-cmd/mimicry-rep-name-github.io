@@ -1,3 +1,4 @@
+<style>
 * {
     margin: 0;
     padding: 0;
@@ -111,13 +112,4 @@ code {
     border-radius: 4px;
     font-family: 'Courier New', monospace;
 }
-
-.status-online {
-    color: #28a745;
-    font-weight: bold;
-}
-
-.status-offline {
-    color: #dc3545;
-    font-weight: bold;
-}
+</style>
