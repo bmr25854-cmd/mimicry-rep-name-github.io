@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth System - Панель управления</title>
+    <title>Auth System</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
         <div class="section">
             <h2>Добавить пользователя</h2>
             <div class="form-group">
-                <input type="text" id="newLogin" placeholder="Логин пользователя">
+                <input type="text" id="newLogin" placeholder="Логин">
                 <button onclick="generateKey()">Сгенерировать ключ</button>
             </div>
             <div class="form-group">
@@ -30,11 +30,11 @@
         </div>
 
         <div class="section">
-            <h2>API для Lua скрипта</h2>
+            <h2>API для скрипта</h2>
             <div class="info-box">
-                <p><strong>URL для скрипта:</strong> <code id="apiUrl">Загрузка...</code></p>
-                <p><strong>Статус:</strong> <span id="status" class="status-online">API активен</span></p>
-                <button onclick="updateLuaScript()">📋 Получить код для Lua</button>
+                <p><strong>API Endpoint:</strong> <code id="apiUrl">/api/check</code></p>
+                <p><strong>Метод:</strong> POST</p>
+                <p><strong>Формат:</strong> JSON</p>
             </div>
         </div>
     </div>
