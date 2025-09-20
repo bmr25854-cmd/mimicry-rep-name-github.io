@@ -1,1 +1,17 @@
-
+{
+  "admin": {
+    "key": "A1B2-C3D4-E5F6-G7H8",
+    "used": "false",
+    "device_id": "null"
+  },
+  "user1": {
+    "key": "X7Y8-Z9W0-Q1R2-S3T4",
+    "used": "false", 
+    "device_id": "null"
+  },
+  "vip": {
+    "key": "M3N4-B5V6-C7X8-D9Y0",
+    "used": "false",
+    "device_id": "null"
+  }
+}
