@@ -98,6 +98,24 @@ userElement.innerHTML = `
     }
 }
 
+function checkUsedKeys() {
+    const db = getDatabase();
+    let usedCount = 0;
+    let totalCount = 0;
+    
+    for (const [login, user] of Object.entries(db)) {
+        totalCount++;
+        if (user.used) {
+            usedCount++;
+        }
+    }
+    
+    document.getElementById('onlineCount').textContent = usedCount + ' / ' + totalCount;
+}
+
+// Обновляй статус каждые 5 секунд
+setInterval(checkUsedKeys, 5000);
+
 function updateKeysFile() {
     const db = getDatabase();
     const keysData = {};
